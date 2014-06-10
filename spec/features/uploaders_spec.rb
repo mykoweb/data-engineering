@@ -53,6 +53,20 @@ describe 'Uploader pages' do
     end
   end
 
+  describe 'when uploading file' do
+    context 'with data in the wrong format' do
+      before do visit new_uploader_path
+        file_path = Rails.root + 'spec/input_with_wrong_data.tab'
+        attach_file('file', file_path)
+        click_button('Import File')
+      end
+
+      it 'should have the correct error message' do
+        expect(page).to have_selector('div', text: 'Invalid file. Choose another')
+      end
+    end
+  end
+
   describe 'when uploading valid file' do
     let(:purchasers) { Purchaser.all }
     let(:items)      { Item.all }

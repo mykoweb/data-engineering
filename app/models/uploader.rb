@@ -7,6 +7,7 @@ class Uploader
 
       CSV.parse(file, headers: true, col_sep: "\t") do |line|
         return nil if any_missing_data_in? line
+        return nil if any_incorrect_data_in? line
 
         gross_revenue += line['item price'].to_d * line['purchase count'].to_i
 
@@ -45,6 +46,13 @@ class Uploader
         return true unless line['item description']
         return true unless line['item price']
         return true unless line['purchase count']
+        return nil
+      end
+
+      # TODO: We need to add more validations either here or in the models
+      def any_incorrect_data_in?(line)
+        # Verify line['purchase count'] is an Integer
+        return true unless line['purchase count'].to_i.to_s == line['purchase count']
         return nil
       end
   end

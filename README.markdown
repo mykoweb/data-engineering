@@ -4,18 +4,18 @@
 
 Follow these commands for setting up on your local environment (assuming you already have a working Ruby environment installed):
 
-  $ git clone https://github.com/mykoweb/data-engineering.git
-  $ cd data-engineering
-  $ bundle install
-  $ rake db:migrate
-  $ rails server
+    $ git clone https://github.com/mykoweb/data-engineering.git
+    $ cd data-engineering
+    $ bundle install
+    $ rake db:migrate
+    $ rails server
 
 You can now open a browser and point to http://localhost:3000
 
 If you want to run tests, you'll need to run
 
-  $ rake db:test:prepare
-  $ rspec
+    $ rake db:test:prepare
+    $ rspec
 
 ## Assumptions
 
