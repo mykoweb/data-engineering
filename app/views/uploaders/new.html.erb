@@ -1,0 +1,7 @@
+<h1>Living Social Coding Challenge</h1>
+
+<h3>Import a tab-delimited file</h3>
+<%= form_tag uploaders_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import File" %>
+<% end %>
