@@ -59,13 +59,41 @@ describe 'Uploader pages' do
     let(:merchants)  { Merchant.all }
     let(:purchases)  { Purchase.all }
     let(:amy_pond)   { Purchaser.find_by(name: 'Amy Pond') }
-    let(:sneakers)   { Merchant.find_by(name: 'Sneaker Store Emporium').items }
+    let(:sneaker_purchases) do
+      Merchant.find_by(name: 'Sneaker Store Emporium').items.first.purchases
+    end
+    let(:snake_items) { Purchaser.find_by(name: 'Snake Plissken').items }
 
     before do
       visit new_uploader_path
       file_path = Rails.root + 'example_input.tab'
       attach_file('file', file_path)
       click_button('Import File')
+    end
+
+    describe 'twice' do
+      before do
+        visit new_uploader_path
+        file_path = Rails.root + 'example_input.tab'
+        attach_file('file', file_path)
+        click_button('Import File')
+      end
+
+      it 'should still have 3 purchasers' do
+        expect(purchasers.count).to equal(3)
+      end
+
+      it 'should still have 3 merchants' do
+        expect(merchants.count).to equal(3)
+      end
+
+      it 'should still have 3 items' do
+        expect(items.count).to equal(3)
+      end
+
+      it 'Snake Plissken should still have purchased 2 different things' do
+        expect(snake_items.uniq.count).to equal(2)
+      end
     end
 
     it 'should have the correct flash message' do
@@ -88,8 +116,12 @@ describe 'Uploader pages' do
       expect(amy_pond.purchases.first.quantity).to equal(5)
     end
 
+    it 'Snake Plissken should have purchased 2 different things' do
+      expect(snake_items.uniq.count).to equal(2)
+    end
+
     it 'should have 5 total purchases for sneakers' do
-      expect(sneakers.inject(0) { |sum, p| p.purchases.first.quantity+sum }).to equal(5)
+      expect(sneaker_purchases.inject(0) { |sum, p| p.quantity+sum }).to equal(5)
     end
   end
 end

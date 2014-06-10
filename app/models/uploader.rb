@@ -7,8 +7,26 @@ class Uploader
         return nil if any_missing_data_in? line
 
         purchaser = Purchaser.find_or_create_by(name: line['purchaser name'])
-        merchant  = Merchant.where(name: line['merchant name']).first_or_create(name: line['merchant name'], address: line['merchant address'])
-        item = Item.where(description: line['item description'], price: line['item price'], merchant_id: merchant.id).first_or_create
+        merchant  = Merchant.where(
+                      name: line['merchant name']
+                    ).first_or_create(
+                      name: line['merchant name'],
+                      address: line['merchant address']
+                    )
+        # TODO: WARNING: Using LIKE in SQL queries is a Rails Antipattern.
+        #       However, I couldn't figure out how to successfully
+        #       query with special characters such as "$" using the
+        #       find_by or find_or_create_by methods. I could only get
+        #       it to work with where and LIKE.
+        #       THIS CODE NEEDS TO BE FIXED
+        item = Item.where(
+                 "description LIKE ? AND price = ? AND merchant_id = ?",
+                 line['item description'], line['item price'], merchant.id
+               ).first_or_create(
+                 description: line['item description'],
+                 price: line['item price'],
+                 merchant_id: merchant.id
+               )
         Purchase.create(quantity: line['purchase count'], purchaser: purchaser, item: item)
       end
       return true
