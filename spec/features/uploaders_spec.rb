@@ -34,6 +34,25 @@ describe 'Uploader pages' do
     end
   end
 
+  describe 'when uploading file with wrong format' do
+    let(:merchants) { Merchant.all }
+
+    before do
+      visit new_uploader_path
+      file_path = Rails.root + 'Gemfile'
+      attach_file('file', file_path)
+      click_button('Import File')
+    end
+
+    it 'should have the correct error message' do
+      expect(page).to have_selector('div', text: 'Invalid file. Choose another')
+    end
+
+    it "shouldn't have any merchants" do
+      expect(merchants).to be_empty
+    end
+  end
+
   describe 'when uploading valid file' do
     let(:purchasers) { Purchaser.all }
     let(:items)      { Item.all }
