@@ -5,8 +5,9 @@ class UploadersController < ApplicationController
   def create
     uploaded_file = params[:file]
     if uploaded_file
-      if Uploader.import(uploaded_file.read)
-        redirect_to uploaders_path, notice: "File successfully imported."
+      gross = Uploader.import_and_calculate_gross(uploaded_file.read)
+      if gross
+        redirect_to uploaders_path(gross: gross), notice: "File successfully imported."
       else
         redirect_to uploaders_path, alert: "Invalid file. Choose another."
       end

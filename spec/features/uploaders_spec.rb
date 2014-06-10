@@ -97,7 +97,11 @@ describe 'Uploader pages' do
     end
 
     it 'should have the correct flash message' do
-      expect(page).to have_selector('div', text: 'File successfully imported')
+      expect(page).to have_selector('div', text: 'File successfully imported.')
+    end
+
+    it 'should show the gross revenue' do
+      expect(page).to have_selector('div', text: "The total gross revenue represented is $95.00")
     end
 
     it 'should have the correct link' do

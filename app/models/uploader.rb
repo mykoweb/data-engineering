@@ -2,9 +2,13 @@ require 'csv'
 
 class Uploader
   class << self
-    def import(file)
+    def import_and_calculate_gross(file)
+      gross_revenue = 0
+
       CSV.parse(file, headers: true, col_sep: "\t") do |line|
         return nil if any_missing_data_in? line
+
+        gross_revenue += line['item price'].to_d * line['purchase count'].to_i
 
         purchaser = Purchaser.find_or_create_by(name: line['purchaser name'])
         merchant  = Merchant.where(
@@ -29,7 +33,7 @@ class Uploader
                )
         Purchase.create(quantity: line['purchase count'], purchaser: purchaser, item: item)
       end
-      return true
+      return gross_revenue
     end
 
     protected

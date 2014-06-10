@@ -1,3 +1,8 @@
 <div>
+  <% if params[:gross] %>
+    <div>
+      The total gross revenue represented is <%= number_to_currency(params[:gross]) %>
+    </div>
+  <% end %>
   <%= link_to 'Upload another file', new_uploader_path, class: 'btn' %>
 </div>
