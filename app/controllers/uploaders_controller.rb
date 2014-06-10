@@ -8,7 +8,7 @@ class UploadersController < ApplicationController
       Uploader.import(uploaded_file.read)
       redirect_to uploaders_path, notice: "File successfully imported."
     else
-      redirect_to new_uploader_path, alert: 'Invalid file format'
+      redirect_to new_uploader_path, alert: 'You need to choose a file'
     end
   end
 

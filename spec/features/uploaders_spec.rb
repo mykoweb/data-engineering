@@ -12,7 +12,7 @@ describe 'Uploader pages' do
     it { should have_button('Import File') }
   end
 
-  describe 'when uploading invalid file' do
+  describe 'when uploading with no file' do
     let(:purchasers) { Purchaser.all }
     let(:items)      { Item.all }
 
@@ -22,7 +22,7 @@ describe 'Uploader pages' do
     end
 
     it 'should have the correct error message' do
-      expect(page).to have_selector('div', text: 'Invalid file format')
+      expect(page).to have_selector('div', text: 'You need to choose a file')
     end
 
     it "shouldn't have any purchasers" do
