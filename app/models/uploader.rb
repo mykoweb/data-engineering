@@ -18,12 +18,12 @@ class Uploader
                       name: line['merchant name'],
                       address: line['merchant address']
                     )
-        # TODO: WARNING: Using LIKE in SQL queries is a Rails Antipattern.
-        #       However, I couldn't figure out how to successfully
-        #       query with special characters such as "$" using the
-        #       find_by or find_or_create_by methods. I could only get
-        #       it to work with where and LIKE.
-        #       THIS CODE NEEDS TO BE FIXED
+        # find_by queries using SQLite don't seem to handle
+        # special characters such as "$" correctly. Using
+        # the where method instead. I'm going to assume special
+        # characters are not being used for the other
+        # objects, but they probably need to be updated
+        # as well if SQLite is going to be used.
         item = Item.where(
                  "description LIKE ? AND price = ? AND merchant_id = ?",
                  line['item description'], line['item price'], merchant.id
